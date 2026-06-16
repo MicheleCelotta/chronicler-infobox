@@ -32,6 +32,7 @@ function cleanHtml(value) {
   return String(value).replace(/<div>/gi, "").replace(/<\/div>/gi, "<br>").trim().replace(/<br>$/, "");
 }
 function buildInfobox(frontmatter, title) {
+  console.log("DEBUG image field:", JSON.stringify(frontmatter["image"]));
   const rawImage = frontmatter["image"];
   let imageHtml = "";
   if (rawImage) {

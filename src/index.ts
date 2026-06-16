@@ -54,7 +54,7 @@ function cleanHtml(value: unknown): string {
 // Genera l'HTML dell'infobox
 function buildInfobox(frontmatter: Record<string, unknown>, title: string): string {
   // Immagine
-  // Immagine
+	console.log("DEBUG image field:", JSON.stringify(frontmatter["image"]))
 	const rawImage = frontmatter["image"]
 	let imageHtml = ""
 	if (rawImage) {
