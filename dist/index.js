@@ -73,6 +73,7 @@ function buildInfobox(frontmatter, title) {
   const aspettoRow = aspetto ? `<tr><th>Aspetto</th><td>${cleanHtml(aspetto)}</td></tr>` : "";
   if (!imageHtml && !rows && !aspettoRow) return "";
   return `
+<style>${INFOBOX_CSS}</style>
 <div class="chronicler-infobox">
   <div class="infobox-title">${title}</div>
   ${imageHtml}
@@ -149,11 +150,6 @@ var INFOBOX_CSS = `
 var ChroniclerInfobox = () => {
   return {
     name: "ChroniclerInfobox",
-    externalResources() {
-      return {
-        css: [{ content: INFOBOX_CSS }]
-      };
-    },
     markdownPlugins() {
       return [
         () => (tree, file) => {

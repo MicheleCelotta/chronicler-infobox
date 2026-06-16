@@ -111,6 +111,7 @@ function buildInfobox(frontmatter: Record<string, unknown>, title: string): stri
   if (!imageHtml && !rows && !aspettoRow) return ""
 
   return `
+<style>${INFOBOX_CSS}</style>
 <div class="chronicler-infobox">
   <div class="infobox-title">${title}</div>
   ${imageHtml}
@@ -190,12 +191,6 @@ const INFOBOX_CSS = `
 export const ChroniclerInfobox: QuartzTransformerPlugin = () => {
   return {
     name: "ChroniclerInfobox",
-
-    externalResources() {
-      return {
-        css: [{ content: INFOBOX_CSS }],
-      }
-    },
 
     markdownPlugins() {
       return [
