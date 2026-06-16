@@ -35,10 +35,21 @@ function buildInfobox(frontmatter, title) {
   const rawImage = frontmatter["image"];
   let imageHtml = "";
   if (rawImage) {
-    const imgStr = Array.isArray(rawImage) ? rawImage[0] : String(rawImage);
-    const rendered = resolveWikilink(imgStr);
-    if (rendered.startsWith("<img")) {
-      imageHtml = `<div class="infobox-image-container">${rendered}</div>`;
+    let filename = "";
+    let alt = "";
+    if (Array.isArray(rawImage) && Array.isArray(rawImage[0])) {
+      filename = String(rawImage[0][0] ?? "").trim();
+      alt = String(rawImage[0][1] ?? filename).trim();
+    } else if (Array.isArray(rawImage)) {
+      filename = String(rawImage[0] ?? "").trim();
+      alt = filename;
+    } else {
+      const rendered = resolveWikilink(String(rawImage));
+      if (rendered.startsWith("<img")) imageHtml = `<div class="infobox-image-container">${rendered}</div>`;
+    }
+    if (filename) {
+      const imagePath = filename.includes("/") ? filename : `/images/${filename}`;
+      imageHtml = `<div class="infobox-image-container"><img src="${imagePath}" alt="${alt}" class="infobox-image" /></div>`;
     }
   }
   const rows = INFOBOX_FIELDS.filter(({ key }) => frontmatter[key] !== void 0 && frontmatter[key] !== null && frontmatter[key] !== "").map(({ key, label }) => {
