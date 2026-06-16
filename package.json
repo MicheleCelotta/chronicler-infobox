@@ -1,0 +1,22 @@
+{
+  "name": "chronicler-infobox",
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "@quartz-community/types": "latest"
+  },
+  "quartz": {
+    "category": ["transformer"]
+  }
+}
