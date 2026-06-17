@@ -123,6 +123,10 @@ var INFOBOX_CSS = `
   width: 40%;
 }
 
+.table-container > table {
+	margin: 1rem 0 !important;
+}
+
 @media (max-width: 600px) {
   .chronicler-infobox {
     float: none;
