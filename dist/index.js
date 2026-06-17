@@ -47,7 +47,10 @@ function buildInfobox(frontmatter, title) {
   const rows = Object.entries(frontmatter).filter(
     ([key, val]) => !EXCLUDED_KEYS.includes(key) && val !== void 0 && val !== null && val !== ""
   ).map(([key, val]) => {
-    const value = typeof val === "string" && val.includes("[[") ? resolveWikilink(val) : String(val);
+    const value = typeof val === "string" && val.includes("[[") ? val.replace(/\[\[([^\]|]+)(?:\|([^\]]*))?\]\]/g, (_, target, label) => {
+      const slug = target.trim().toLowerCase().replace(/\s+/g, "-");
+      return `<a href="/${slug}">${(label ?? target).trim()}</a>`;
+    }) : String(val);
     return `<tr><th>${key}</th><td>${value}</td></tr>`;
   }).join("");
   const aspetto = frontmatter["Aspetto"];

@@ -78,8 +78,11 @@ function buildInfobox(frontmatter: Record<string, unknown>, title: string): stri
   )
   .map(([key, val]) => {
     const value = typeof val === "string" && val.includes("[[")
-      ? resolveWikilink(val)
-      : String(val)
+  ? val.replace(/\[\[([^\]|]+)(?:\|([^\]]*))?\]\]/g, (_, target, label) => {
+      const slug = target.trim().toLowerCase().replace(/\s+/g, "-")
+      return `<a href="/${slug}">${(label ?? target).trim()}</a>`
+    })
+  : String(val)
     return `<tr><th>${key}</th><td>${value}</td></tr>`
   })
   .join("")
