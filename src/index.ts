@@ -5,7 +5,7 @@ type HTML = { type: "html"; value: string }
 
 // Campi del frontmatter di Chronicler da mostrare nell'infobox
 // Puoi aggiungere o rimuovere voci a piacere
-const EXCLUDED_KEYS = ["title", "tags", "image", "layout", "Aspetto", "aliases", "draft"]
+const EXCLUDED_KEYS = ["title", "tags", "image", "layout", "Aspetto", "aliases", "draft", "socialImage"]
 
 // Converte [[Link]] e [[File.png, Alt]] in testo o tag <img>
 function resolveWikilink(value: unknown): string {

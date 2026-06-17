@@ -1,5 +1,5 @@
 // src/index.ts
-var EXCLUDED_KEYS = ["title", "tags", "image", "layout", "Aspetto", "aliases", "draft"];
+var EXCLUDED_KEYS = ["title", "tags", "image", "layout", "Aspetto", "aliases", "draft", "socialImage"];
 function resolveWikilink(value) {
   if (value === null || value === void 0) return "";
   const str = String(value).trim();
