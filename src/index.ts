@@ -5,16 +5,7 @@ type HTML = { type: "html"; value: string }
 
 // Campi del frontmatter di Chronicler da mostrare nell'infobox
 // Puoi aggiungere o rimuovere voci a piacere
-const INFOBOX_FIELDS: { key: string; label: string }[] = [
-  { key: "Razza",        label: "Razza" },
-  { key: "Classe",       label: "Classe" },
-  { key: "Background",   label: "Background" },
-  { key: "Allineamento", label: "Allineamento" },
-  { key: "Età",          label: "Età" },
-  { key: "Altezza",      label: "Altezza" },
-  { key: "Peso",         label: "Peso" },
-  { key: "Livello",      label: "Livello" },
-]
+const EXCLUDED_KEYS = ["title", "tags", "image", "layout", "Aspetto", "aliases", "draft"]
 
 // Converte [[Link]] e [[File.png, Alt]] in testo o tag <img>
 function resolveWikilink(value: unknown): string {
@@ -80,27 +71,18 @@ function buildInfobox(frontmatter: Record<string, unknown>, title: string): stri
 	}
 
   // Righe campi
-  const rows = INFOBOX_FIELDS
-    .filter(({ key }) => frontmatter[key] !== undefined && frontmatter[key] !== null && frontmatter[key] !== "")
-    .map(({ key, label }) => {
-      const raw = frontmatter[key]
-      let value: string
-
-      if (key === "Aspetto") {
-        value = cleanHtml(raw)
-      } else if (typeof raw === "string" && raw.includes("[[")) {
-        value = resolveWikilink(raw)
-      } else {
-        value = String(raw)
-      }
-
-      return `
-        <tr>
-          <th>${label}</th>
-          <td>${value}</td>
-        </tr>`
-    })
-    .join("")
+  const rows = Object.entries(frontmatter)
+  .filter(([key, val]) =>
+    !EXCLUDED_KEYS.includes(key) &&
+    val !== undefined && val !== null && val !== ""
+  )
+  .map(([key, val]) => {
+    const value = typeof val === "string" && val.includes("[[")
+      ? resolveWikilink(val)
+      : String(val)
+    return `<tr><th>${key}</th><td>${value}</td></tr>`
+  })
+  .join("")
 
   // Aspetto è gestito a parte (campo multiriga)
   const aspetto = frontmatter["Aspetto"]

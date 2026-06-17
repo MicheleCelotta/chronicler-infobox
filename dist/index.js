@@ -1,14 +1,5 @@
 // src/index.ts
-var INFOBOX_FIELDS = [
-  { key: "Razza", label: "Razza" },
-  { key: "Classe", label: "Classe" },
-  { key: "Background", label: "Background" },
-  { key: "Allineamento", label: "Allineamento" },
-  { key: "Et\xE0", label: "Et\xE0" },
-  { key: "Altezza", label: "Altezza" },
-  { key: "Peso", label: "Peso" },
-  { key: "Livello", label: "Livello" }
-];
+var EXCLUDED_KEYS = ["title", "tags", "image", "layout", "Aspetto", "aliases", "draft"];
 function resolveWikilink(value) {
   if (value === null || value === void 0) return "";
   const str = String(value).trim();
@@ -53,21 +44,11 @@ function buildInfobox(frontmatter, title) {
       imageHtml = `<div class="infobox-image-container"><img src="${imagePath}" alt="${alt}" class="infobox-image" /></div>`;
     }
   }
-  const rows = INFOBOX_FIELDS.filter(({ key }) => frontmatter[key] !== void 0 && frontmatter[key] !== null && frontmatter[key] !== "").map(({ key, label }) => {
-    const raw = frontmatter[key];
-    let value;
-    if (key === "Aspetto") {
-      value = cleanHtml(raw);
-    } else if (typeof raw === "string" && raw.includes("[[")) {
-      value = resolveWikilink(raw);
-    } else {
-      value = String(raw);
-    }
-    return `
-        <tr>
-          <th>${label}</th>
-          <td>${value}</td>
-        </tr>`;
+  const rows = Object.entries(frontmatter).filter(
+    ([key, val]) => !EXCLUDED_KEYS.includes(key) && val !== void 0 && val !== null && val !== ""
+  ).map(([key, val]) => {
+    const value = typeof val === "string" && val.includes("[[") ? resolveWikilink(val) : String(val);
+    return `<tr><th>${key}</th><td>${value}</td></tr>`;
   }).join("");
   const aspetto = frontmatter["Aspetto"];
   const aspettoRow = aspetto ? `<tr><th>Aspetto</th><td>${cleanHtml(aspetto)}</td></tr>` : "";
